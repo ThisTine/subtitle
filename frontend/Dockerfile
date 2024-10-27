@@ -12,6 +12,6 @@ FROM thistine/simple-http-server
 
 WORKDIR /app
 
-COPY --from=builder /app/dist ./static
+COPY --from=builder /app/dist ./static/display
 
 EXPOSE 4000
