@@ -19,7 +19,9 @@ import {FirebaseService} from "./firebaseService";
 
 
 (async () => {
-    require('dotenv').config()
+    if(process.env.NODE_ENV !== 'production'){
+        require('dotenv').config()
+    }
     new FirebaseService();
     await FirebaseService.initFeatureFlag();
     const io = new Server({
