@@ -43,7 +43,7 @@ function App() {
             left:"-18px",
             width:"30px"
           }
-        } src={"/img.png"} />
+        } src={"/display/img.png"} />
         <Text>{translatedText}</Text>
       </Box>}
 
