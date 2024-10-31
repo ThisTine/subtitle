@@ -62,6 +62,19 @@ export class GenAiService{
         GenAiService.initGenAi()
     }
 
+    public static async getToken(text: string){
+        try{
+            const countResult = await GenAiService.model?.countTokens(text);
+            if (countResult){
+                return countResult.totalTokens;
+            }
+            return 0
+        }catch (e) {
+            console.error(e);
+            return 0;
+        }
+    }
+
     public async genText(text: string){
         {
             try{

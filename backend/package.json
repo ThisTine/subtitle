@@ -21,6 +21,7 @@
     "@google/generative-ai": "^0.21.0",
     "firebase": "^11.0.1",
     "firebase-admin": "^12.7.0",
+    "kafkajs": "^2.2.4",
     "socket.io": "^4.8.0",
     "ws": "^8.18.0"
   }

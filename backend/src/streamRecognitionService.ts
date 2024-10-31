@@ -11,7 +11,7 @@ export class StreamRecognitionService {
         });
     }
 
-    public static onSetText(text: string) {
+    public static onSetText(text: string, confidence: number) {
     }
 
     public static changeLanguageCode(languageCode: string) {
@@ -38,7 +38,7 @@ export class StreamRecognitionService {
             }).on('data', (data:any) => {
                 if(data.results[0] && data.results[0].alternatives[0]) {
                     let result = data.results[0].alternatives[0].transcript;
-                    StreamRecognitionService.onSetText(result);
+                    StreamRecognitionService.onSetText(result, data.results[0].alternatives[0].confidence);
                 }
             }).on('error', (e:any)=>{
                 console.error(e);

@@ -1,3 +1,6 @@
+import {KafkaService} from "./KafkaService";
+import {GenAiService} from "./genAiService";
+
 export class TextService {
     private static timer: any = null;
 
@@ -39,12 +42,24 @@ export class TextService {
         }
     }
 
-    public setText(newText: string){
+    private static async sendTranslatedMessage(text: string, confidence: number, translatedText: string) {
+        GenAiService.getToken(text).then((token)=>{
+            KafkaService.sendTranslatedMessage({
+                text: text,
+                textConfidence: confidence,
+                translatedText: translatedText,
+                token: token
+            }).catch(console.error);
+        })
+    }
+
+    public setText(newText: string, confidence: number) {
         TextService.onSendTextAndCleanUp(newText);
         TextService.clearTimer();
         TextService.timer = setTimeout(()=>{
             TextService.onGenerateContent(newText).then((translatedText)=>{
                     TextService.onSendTranslatedTextAndCleanUp(translatedText);
+                    TextService.sendTranslatedMessage(newText, confidence, translatedText).catch(console.error);
                 });
             }, 500);
     }

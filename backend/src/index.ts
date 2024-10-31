@@ -13,6 +13,7 @@ import {GenAiService} from "./genAiService";
 import {StreamRecognitionService} from "./streamRecognitionService";
 import firebase from "firebase/compat";
 import {FirebaseService} from "./firebaseService";
+import {KafkaService} from "./KafkaService";
 
 
 // Initialize Firebase
@@ -22,6 +23,8 @@ import {FirebaseService} from "./firebaseService";
     if(process.env.NODE_ENV !== 'production'){
         require('dotenv').config()
     }
+    new KafkaService();
+    await KafkaService.init();
     new FirebaseService();
     await FirebaseService.initFeatureFlag();
     const io = new Server({
