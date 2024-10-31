@@ -29,7 +29,7 @@ FROM node AS runner
 
 WORKDIR /app
 
-RUN yarn add -g firebase-tools
+RUN npm i -g yarn
 
 COPY --from=package /app/node_modules ./node_modules
 
