@@ -25,11 +25,11 @@ COPY . .
 
 RUN yarn build
 
-FROM node:alpine AS runner
+FROM node AS runner
 
 WORKDIR /app
 
-RUN npm install -g firebase-tools
+RUN yarn add -g firebase-tools
 
 COPY --from=package /app/node_modules ./node_modules
 
