@@ -29,6 +29,8 @@ FROM node:alpine AS runner
 
 WORKDIR /app
 
+RUN npm install -g firebase-tools
+
 COPY --from=package /app/node_modules ./node_modules
 
 COPY --from=builder /app/dist ./dist
