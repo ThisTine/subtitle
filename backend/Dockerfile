@@ -29,8 +29,6 @@ FROM node AS runner
 
 WORKDIR /app
 
-RUN npm install -g yarn --force
-
 COPY --from=package /app/node_modules ./node_modules
 
 COPY --from=builder /app/dist ./dist

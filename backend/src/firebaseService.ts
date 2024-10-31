@@ -29,12 +29,21 @@ export class FirebaseService {
                 "use_additional_prompt": false
             }
         })
-        await FirebaseService.template.load()
+        try{
+            await FirebaseService.template.load()
+        }catch (e){
+            console.error(e)
+        }
         FirebaseService.cfg = FirebaseService.template.evaluate()
         setInterval(async ()=>{
-            await FirebaseService.template.load()
+            try{
+                await FirebaseService.template.load()
+            }
+            catch (e){
+                console.error(e)
+            }
             FirebaseService.cfg = FirebaseService.template.evaluate()
-        }, 3000)
+        }, 10000)
     }
 
     constructor() {
