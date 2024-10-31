@@ -29,7 +29,7 @@ FROM node AS runner
 
 WORKDIR /app
 
-RUN npm install -g yarn
+RUN npm install -g yarn --force
 
 COPY --from=package /app/node_modules ./node_modules
 
