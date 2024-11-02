@@ -1,11 +1,6 @@
-import {
-    ChatSession,
-    GenerativeModel,
-    GoogleGenerativeAI,
-    HarmBlockThreshold,
-    HarmCategory
-} from "@google/generative-ai";
+import {ChatSession, FunctionDeclaration, GenerativeModel, GoogleGenerativeAI, SchemaType} from "@google/generative-ai";
 import {FirebaseService} from "./firebaseService";
+
 
 export class GenAiService{
     private static genAi: GoogleGenerativeAI | null = null;
@@ -15,8 +10,17 @@ export class GenAiService{
     private static isUseAdditionalInstruction: boolean = false;
     private static modelCfg = "gemini-1.5-flash";
     private static _systemInstruction: string = `
-    You are a translator at Google's DevFest Cloud Bangkok event. This event is a technology conference that focuses on Google Cloud technologies.
-    Your job is to translate the speakers' presentations from Thai to English. Please help output the translated text in the chat box. Response with "****" if you are unable to translate the text.
+    You are an English translator at Google's DevFest Cloud Bangkok event. This event is a technology conference that focuses on Google Cloud technologies.
+    
+    # STEPS
+    1. If there is an input proceed to step 2, otherwise return the input.
+    2. Translate the speakers' text to English.
+    3. Step back and correct the translation if it's wrong.
+    4. If you see text similar to DevFest Cloud Bangkok, translate it to DevFest Cloud Bangkok.
+    5. If you're unable to translate the text, return the input.
+    
+    # OUTPUT
+    - The translated text.
      `;
     private static get systemInstruction(){
         if (FirebaseService.getUseAdditionalPrompt()){
@@ -31,26 +35,26 @@ export class GenAiService{
             model: GenAiService.modelCfg,
             systemInstruction: GenAiService.systemInstruction,
         });
-        GenAiService.chat = GenAiService.model.startChat({
-            safetySettings:[
-                {
-                    category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-                    threshold: HarmBlockThreshold.BLOCK_NONE,
-                },
-                {
-                    category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
-                    threshold: HarmBlockThreshold.BLOCK_NONE
-                },
-                {
-                    category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
-                    threshold: HarmBlockThreshold.BLOCK_NONE
-                },
-                {
-                    category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-                    threshold: HarmBlockThreshold.BLOCK_NONE
-                },
-            ]
-        });
+        // GenAiService.chat = GenAiService.model.startChat({
+        //     safetySettings:[
+        //         {
+        //             category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+        //             threshold: HarmBlockThreshold.BLOCK_NONE,
+        //         },
+        //         {
+        //             category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+        //             threshold: HarmBlockThreshold.BLOCK_NONE
+        //         },
+        //         {
+        //             category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+        //             threshold: HarmBlockThreshold.BLOCK_NONE
+        //         },
+        //         {
+        //             category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+        //             threshold: HarmBlockThreshold.BLOCK_NONE
+        //         },
+        //     ]
+        // });
     }
 
     constructor(){
@@ -85,12 +89,13 @@ export class GenAiService{
                     GenAiService.isUseAdditionalInstruction = FirebaseService.getUseAdditionalPrompt();
                     GenAiService.setAdditionalInstruction(FirebaseService.getAdditionalPrompt());
                 }
-                const res = await GenAiService.chat?.sendMessage(text);
+                const res = await GenAiService.model?.generateContent(text);
                 try{
                     if (res){
                         return res.response.text();
                     }
                 }catch (err){
+                    console.error(err);
                     return "****"
                 }
             }catch (e) {

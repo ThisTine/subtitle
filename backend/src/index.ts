@@ -11,7 +11,6 @@ import {
 import {TextService} from "./textService";
 import {GenAiService} from "./genAiService";
 import {StreamRecognitionService} from "./streamRecognitionService";
-import firebase from "firebase/compat";
 import {FirebaseService} from "./firebaseService";
 import {KafkaService} from "./KafkaService";
 
@@ -26,6 +25,7 @@ import {KafkaService} from "./KafkaService";
     new KafkaService();
     await KafkaService.init();
     new FirebaseService();
+    new StreamRecognitionService();
     await FirebaseService.initFeatureFlag();
     const io = new Server({
         path: '/api/socket.io',
@@ -34,7 +34,6 @@ import {KafkaService} from "./KafkaService";
     let mic: Socket | null = null;
     const textService = new TextService();
     const genAiService = new GenAiService();
-    const streamRecognitionService = new StreamRecognitionService();
 
     StreamRecognitionService.onSetText = textService.setText
 
