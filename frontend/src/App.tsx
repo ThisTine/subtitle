@@ -34,8 +34,8 @@ function App() {
   }, []);
 
   return (
-    <Box w={"full"} h={"100vh"} p={"10"} flexDirection={"column"} gap={5} boxSizing={"border-box"} display={"flex"} alignItems={"end"} justifyContent={"end"} >
-      {translatedText && <Box pos={"relative"} p={"2"} bg={"rgba(0,0,0,0.4)"} color={"white"} textAlign={"end"}>
+    <Box w={"full"} h={"100vh"} fontWeight={"bold"} p={"10"} flexDirection={"column"} gap={5} boxSizing={"border-box"} display={"flex"} alignItems={"end"} justifyContent={"end"} >
+      {translatedText && <Box pos={"relative"} p={"2"} bg={"rgba(0,0,0,0.9)"} color={"white"} textAlign={"end"}>
         <img alt={"gemini"} style={
           {
             position:"absolute",
@@ -47,7 +47,7 @@ function App() {
         <Text>{translatedText}</Text>
       </Box>}
 
-      {text && <Box p={"2"} bg={"rgba(0,0,0,0.5)"} color={"white"} textAlign={"end"}>
+      {text && <Box p={"2"} fontWeight={"bold"} bg={"rgba(0,0,0,0.8)"} color={"white"} textAlign={"end"}>
         <Text>{text}</Text>
       </Box>}
     </Box>
